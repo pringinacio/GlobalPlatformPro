@@ -69,10 +69,7 @@ public class HostDownloadProfile {
 //    public static final byte INS_PUT_KEY = (byte) 0xD8;
 //    public static final byte INS_STORE_DATA = (byte) 0xE2;
 //    public static final byte INS_GET_DATA = (byte) 0xCA;
-//
-//    public static final byte P1_INSTALL_AND_MAKE_SELECTABLE = (byte) 0x0C;
-//    public static final byte P1_INSTALL_FOR_INSTALL = (byte) 0x04;
-//
+
     private GPCrypto gpCrypto;
     private byte[] hostChallenge;
 //    protected boolean strict = true;
@@ -296,104 +293,6 @@ public class HostDownloadProfile {
 //        }
 //    }
 //
-//    public void putKeys(List<GPKey> keys, boolean replace) throws GPException, CardException {
-//        // Check for sanity and usability
-//        if (keys.size() < 1 || keys.size() > 3) {
-//            throw new IllegalArgumentException("Can add 1 or up to 3 keys at a time");
-//        }
-//        if (keys.size() > 1) {
-//            for (int i = 1; i < keys.size(); i++) {
-//                if (keys.get(i - 1).getID() != keys.get(i).getID() - 1) {
-//                    throw new IllegalArgumentException("Key ID-s of multiple keys must be sequential!");
-//                }
-//            }
-//        }
-//
-//        // Log and trace
-//        logger.debug("PUT KEY version {}", keys.get(0).getVersion());
-//        for (GPKey k : keys) {
-//            logger.trace("PUT KEY:" + k);
-//        }
-//        // Check consistency, if template is available.
-//        List<GPKey> tmpl = getKeyInfoTemplate();
-//
-//        if (tmpl.size() > 0) {
-////            // TODO: move to GPTool
-////            if ((tmpl.get(0).getVersion() < 1 || tmpl.get(0).getVersion() > 0x7F) && replace) {
-////                giveStrictWarning("Trying to replace factory keys, when you need to add new ones? Is this a virgin card? (use --virgin)");
-////            }
-////
-////            // Check if key types and lengths are the same when replacing
-////            if (replace && (keys.get(0).getType() != tmpl.get(0).getType() || keys.get(0).getLength() != tmpl.get(0).getLength())) {
-////                // FIXME: SCE60 template has 3DES keys but uses AES.
-////                giveStrictWarning("Can not replace keys of different type or size: " + tmpl.get(0).getType() + "->" + keys.get(0).getType());
-////            }
-////
-////            // Check for matching version numbers if replacing and vice versa
-////            if (!replace && (keys.get(0).getVersion() == tmpl.get(0).getVersion())) {
-////                throw new IllegalArgumentException("Not adding keys and version matches existing?");
-////            }
-////
-////            if (replace && (keys.get(0).getVersion() != tmpl.get(0).getVersion())) {
-////                throw new IllegalArgumentException("Replacing keys and versions don't match existing?");
-////            }
-//        } else {
-//            if (replace) {
-//                logger.warn("No key template on card but trying to replace. Implying add");
-//                replace = false;
-//            }
-//        }
-//
-//        // Construct APDU
-//        int P1 = 0x00; // New key in single command unless replace
-//        if (replace) {
-//            P1 = keys.get(0).getVersion();
-//        }
-//        int P2 = keys.get(0).getID();
-//        if (keys.size() > 1) {
-//            P2 |= 0x80;
-//        }
-//        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-//        try {
-//            // New key version
-//            bo.write(keys.get(0).getVersion());
-//            // Key data
-//            for (GPKey k : keys) {
-//                bo.write(encodeKey(k, sessionKeys.getKeyFor(GPSessionKeyProvider.KeyPurpose.DEK), true));
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        CommandAPDU command = new CommandAPDU(CLA_GP, INS_PUT_KEY, P1, P2, bo.toByteArray());
-//        ResponseAPDU response = transmit(command);
-//        GPException.check(response, "PUT KEY failed");
-//    }
-//
-//    // Puts a RSA public key for DAP purposes (format 1)
-//    public void putKey(RSAPublicKey pubkey, int version) throws CardException, GPException {
-//        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-//
-//        try {
-//            bo.write(version); // DAP key Version number
-//            bo.write(0xA1); // Modulus
-//            byte[] modulus = GPUtils.positive(pubkey.getModulus());
-//            byte[] exponent = GPUtils.positive(pubkey.getPublicExponent());
-//            bo.write(modulus.length);
-//            bo.write(modulus);
-//            bo.write(0xA0);
-//            bo.write(exponent.length);
-//            bo.write(exponent);
-//            bo.write(0x00); // No KCV
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        CommandAPDU command = new CommandAPDU(CLA_GP, INS_PUT_KEY, 0x00, 0x01, bo.toByteArray());
-//        ResponseAPDU response = transmit(command);
-//        GPException.check(response, "PUT KEY failed");
-//    }
-
 //    // TODO: The way registry parsing mode is piggybacked to the registry class is not really nice.
 //    private byte[] getConcatenatedStatus(GPRegistry reg, int p1, byte[] data) throws CardException, GPException {
 //        // By default use tags
